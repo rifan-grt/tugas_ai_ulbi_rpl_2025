@@ -1,0 +1,115 @@
+{
+  "name": "My workflow 8",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e4c8bcd3-34df-4cd2-bb59-4ba649e61d68",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        -144
+      ],
+      "id": "9f1d2bf8-9536-431d-b7a2-12034a2102d4",
+      "name": "Webhook",
+      "webhookId": "e4c8bcd3-34df-4cd2-bb59-4ba649e61d68"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://devunibil.posindonesia.co.id:22062/openapi/v1/agentAI/model",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.body.message.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        0,
+        -176
+      ],
+      "id": "30888544-3aa1-4de2-b7e9-ca3b7d7dcecc",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.chat.id }}",
+        "text": "={{ $json.responseMessage }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        -160
+      ],
+      "id": "dc43f7c2-caa1-4bab-ab56-eba27a403a26",
+      "name": "Send a text message",
+      "webhookId": "31944481-040c-462b-a612-43b746116f56",
+      "credentials": {
+        "telegramApi": {
+          "id": "YANvWE58uMv7KbEo",
+          "name": "Telegram account 4"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "e9524af0-30bf-46af-80f4-927fd8e0768e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1411c4b520c30c7a02ff5717b9ae919c90ad585267eb4c5f0fd01cb26718c048"
+  },
+  "id": "x8l5mfQPE0w445Kf",
+  "tags": []
+}
